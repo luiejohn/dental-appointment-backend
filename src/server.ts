@@ -9,6 +9,7 @@ import yaml from "js-yaml";
 import swaggerUi from "swagger-ui-express";
 
 import authRoutes from "./routes/auth";
+import dentistRoutes from "./routes/dentists";
 import { errorHandler } from "./middleware/error.middleware";
 
 const app = express();
@@ -32,6 +33,7 @@ app.use(
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/dentists", dentistRoutes);
 
 const specPath = path.join(__dirname, "./docs/openapi.yaml");
 const openapiSpec = yaml.load(fs.readFileSync(specPath, "utf8"));
