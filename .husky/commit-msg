@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")"/_/husky.sh
+
+MSG_FILE="$1"
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|chore)(\([a-z0-9_-]+\))?:\s.+$'
+
+if ! grep -qE "$PATTERN" "$MSG_FILE"; then
+  echo >&2 "⛔ Invalid commit message format"
+  echo >&2 "→ Use: <type>(<scope>): <description>"
+  echo >&2 "   e.g. feat(api): add retry logic"
+  exit 1
+fi
