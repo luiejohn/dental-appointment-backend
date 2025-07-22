@@ -10,6 +10,8 @@ import swaggerUi from "swagger-ui-express";
 
 import authRoutes from "./routes/auth";
 import dentistRoutes from "./routes/dentists";
+import appointmentRoutes from "./routes/appointments";
+import { requireAuth } from "./middleware/auth.middleware";
 import { errorHandler } from "./middleware/error.middleware";
 
 const app = express();
@@ -37,6 +39,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/dentists", dentistRoutes);
+app.use("/api/appointments", requireAuth, appointmentRoutes);
 
 const specPath = path.join(__dirname, "./docs/openapi.yaml");
 const openapiSpec = yaml.load(fs.readFileSync(specPath, "utf8"));
