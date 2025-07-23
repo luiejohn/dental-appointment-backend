@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: T!HV5b2efc!M!?
+      POSTGRES_DB: dental_scheduler
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+
+  api:
+    build: .
+    image: dental-backend:latest
+    env_file:
+      - .env
+    entrypoint: ["/usr/local/bin/wait-for-it.sh", "db", "5432", "--"]
+    command: ["node", "dist/server.js"]
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db-data:
