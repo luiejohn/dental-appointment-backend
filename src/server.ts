@@ -3,10 +3,6 @@ import express from "express";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import fs from "fs";
-import path from "path";
-import yaml from "js-yaml";
-import swaggerUi from "swagger-ui-express";
 
 import authRoutes from "./routes/auth";
 import dentistRoutes from "./routes/dentists";
@@ -47,14 +43,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/dentists", dentistRoutes);
 app.use("/api/appointments", requireAuth, appointmentRoutes);
 
-const specPath = path.resolve(__dirname, "..", "docs", "openapi.yaml");
-const openapiSpec = yaml.load(fs.readFileSync(specPath, "utf8"));
-app.use(
-  "/api/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(openapiSpec as Record<string, unknown>, { explorer: true })
-);
-
 app.use(errorHandler);
 
 (async () => {
@@ -69,5 +57,4 @@ app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📖 Swagger UI available at http://localhost:${PORT}/api/docs`);
 });

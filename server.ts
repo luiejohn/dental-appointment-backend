@@ -4,23 +4,39 @@ import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import { json } from "body-parser";
-import { errorHandler } from "./middleware/error.middleware";
-import authRoutes from "./routes/auth";
-import apptRoutes from "./routes/appointments";
+import { errorHandler } from "./src/middleware/error.middleware";
+import authRoutes from "./src/routes/auth";
+import apptRoutes from "./src/routes/appointments";
 
 const app = express();
 
-// Global middleware
-app.use(helmet());
-app.use(cors({ origin: /* your front-end URL */ }));
-app.use(json());
-app.use(rateLimit({ windowMs: 60_000, max: 100 })); // 100 req/min
+const allowedOrigins = [process.env.FRONTEND_URL!, process.env.CLOUDFRONT_URL!];
 
-// Routes
+app.use(
+  cors({
+    origin: (incomingOrigin, callback) => {
+      if (!incomingOrigin) return callback(null, true);
+
+      if (allowedOrigins.includes(incomingOrigin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error(`CORS: Unauthorized origin ${incomingOrigin}`),
+        false
+      );
+    },
+    credentials: true,
+  })
+);
+
+app.use(helmet());
+app.use(json());
+app.use(rateLimit({ windowMs: 60_000, max: 100 }));
+
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", apptRoutes);
 
-// Error handler (must come last)
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
