@@ -29,5 +29,4 @@ RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 EXPOSE 4000
 
-ENTRYPOINT ["/usr/local/bin/wait-for-it.sh", "db", "5432", "--"]
-CMD ["node", "dist/server.js"]
+ENTRYPOINT ["node", "dist/server.js"]

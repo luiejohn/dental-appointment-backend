@@ -2,9 +2,9 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "npx prisma migrate deploy && node dist/server.js",
     "prisma": "prisma",
-    "seed": "ts-node -r dotenv/config prisma/seed.ts",
+    "seed:js": "node prisma/seed.js",
     "prepare": "husky",
     "postinstall": "prisma generate"
   },

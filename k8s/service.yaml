@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: dental-backend-svc
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: dental-backend
   ports:
-    - port: 4000
+    - port: 80
       targetPort: 4000
-      nodePort: 30080

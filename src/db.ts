@@ -1,4 +1,3 @@
-// src/db.ts
 import { Pool, QueryResult } from "pg";
 
 const pool = new Pool({
@@ -13,5 +12,4 @@ export function query(text: string, params?: any[]): Promise<QueryResult<any>> {
   return pool.query(text, params);
 }
 
-// If you need transactions or advanced control:
 export { pool };

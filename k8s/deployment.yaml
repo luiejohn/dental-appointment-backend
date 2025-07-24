@@ -2,10 +2,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: dental-backend
-  labels:
-    app: dental-backend
 spec:
-  replicas: 2
+  replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: dental-backend
@@ -14,27 +14,14 @@ spec:
       labels:
         app: dental-backend
     spec:
+      imagePullSecrets:
+        - name: ecr-pull-secret
+
       containers:
         - name: backend
-          image: dental-backend:local
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: db-credentials
-                  key: DATABASE_URL
+          image: 292659698129.dkr.ecr.us-east-1.amazonaws.com/dental-backend:latest
           ports:
             - containerPort: 4000
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 4000
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: 4000
-            initialDelaySeconds: 15
-            periodSeconds: 20
+          envFrom:
+            - secretRef:
+                name: dental-backend-secrets
