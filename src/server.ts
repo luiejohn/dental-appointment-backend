@@ -12,14 +12,32 @@ import { errorHandler } from "./middleware/error.middleware";
 import { query } from "./db";
 
 const app = express();
-
 app.set("trust proxy", 1);
 app.use(helmet());
+
 const PORT = process.env.PORT || 4000;
+
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  `http://localhost:3000`,
+].filter(Boolean) as string[];
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || `http://localhost:${PORT}`,
+    origin: (incomingOrigin, callback) => {
+      if (!incomingOrigin) {
+        return callback(null, true);
+      }
+      if (allowedOrigins.includes(incomingOrigin)) {
+        return callback(null, true);
+      }
+      return callback(
+        new Error(
+          `CORS policy violation: Origin ${incomingOrigin} not allowed`
+        ),
+        false
+      );
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
