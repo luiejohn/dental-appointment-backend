@@ -14,11 +14,11 @@
 - **Purpose**: An Express.js API server for managing users, dentists, and appointments in the Dental Scheduler system.
 - **Assumptions**:
   - **PROJECT PRIORITY**: Focused on trying to build as much as functionality as possible as described on the test instructions sent of the PDF.
-  - **Authentication**: JWT stored in an HTTP-only cookie, validated on each request via `requireAuth` middleware.
-  - **API Base URL**: `/api` (e.g. `https://api.example.com/api/...`)
+  - **Authentication**: JWT bearer token
+  - **API Base URL**: `https://d1jvzv365exkzh.cloudfront.net/api`
   - **Database**: PostgreSQL accessed via Prisma ORM; connection configured by the `DATABASE_URL` environment variable.
   - **Rate Limiting**: Requests are throttled with a 1-minute window to mitigate abuse.
-  - **CORS**: Configured to allow only the trusted frontend domain (`FRONTEND_URL`) with credentials.
+  - **CORS**: Configured to allow only the trusted frontend domain (`https://dentals-appointment.netlify.app/`) with credentials.
 
 ---
 
@@ -58,8 +58,8 @@
 
 ```plaintext
 ┌───────────────┐        HTTPS         ┌──────────────────────┐
-│  Frontend App │◀───────────────────▶│      CloudFront       │
-│ (Netlify/Vercel)│                    │                       │
+│  Frontend App │◀───────────────────▶│      CloudFront      │
+│ (Netlify/Vercel)│                    │                      │
 └───────────────┘                      └──────────────────────┘
                                            │
                                            │ HTTPS
