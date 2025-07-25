@@ -13,6 +13,7 @@ import { query } from "./db";
 
 const app = express();
 
+app.set("trust proxy", 1);
 app.use(helmet());
 const PORT = process.env.PORT || 4000;
 
