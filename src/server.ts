@@ -45,6 +45,17 @@ app.use(
   })
 );
 
+app.options(
+  "/api/*",
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 204,
+  })
+);
+
 app.use(
   rateLimit({
     windowMs: 60_000,
